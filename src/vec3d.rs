@@ -45,3 +45,25 @@ impl<T: Float> Sub for Vec3d<T> {
         };
     }
 }
+
+impl<T: Float> Mul<T> for Vec3d<T> {
+    type Output = Vec3d<T>;
+    fn mul(self, other: T) -> Self::Output {
+        return Vec3d {
+            x: self.x - other,
+            y: self.y - other,
+            z: self.z - other
+        };
+    }
+}
+
+impl<T: Float> Div<T> for Vec3d<T> {
+    type Output = Vec3d<T>;
+    fn div(self, other: T) -> Self::Output {
+        return Vec3d {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other
+        };
+    }
+}
