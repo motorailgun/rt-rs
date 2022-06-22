@@ -1,11 +1,13 @@
 pub mod vec3d;
 pub mod color;
+pub mod ray;
 
 use vec3d::Vec3d;
 use color::Color;
+use ray::Ray;
 
-fn ray_color(ray: Vec3d<f64>) -> Color<u8> {
-    
+fn ray_color(ray: Ray<f32>) -> Color<u8> {
+
 }
 
 fn main() {
