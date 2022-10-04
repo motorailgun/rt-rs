@@ -15,8 +15,8 @@ fn main() {
     const IMAGE_HEIGHT: usize = 200;
     const IMAGE_WIDTH: usize = ((IMAGE_HEIGHT as f32) * ASPECT_RATIO) as usize;
 
-    let canvas: Vec<Vec<Color<u8>>> = (0..(IMAGE_HEIGHT - 1)).into_iter().map(|y: usize| {
-        (0..(IMAGE_WIDTH - 1)).into_iter().map(|x: usize| {
+    let canvas: Vec<Vec<Color<u8>>> = (0..IMAGE_HEIGHT).into_iter().map(|y: usize| {
+        (0..IMAGE_WIDTH).into_iter().map(|x: usize| {
             Color{
                 r: (x % 256) as u8,
                 g: (y % 256) as u8,
