@@ -48,9 +48,14 @@ impl<T: Num + Copy + fmt::Display> Rem<T> for Color<T> {
     }
 }
 
-impl<T: Num + fmt::Display + NumCast + Copy> Color<T> {
+impl<T: Num + fmt::Display + NumCast + Copy + PartialOrd> Color<T> {
     fn clamp(&self) -> Color<T> {
-        *self % T::one()
+        let one = T::one();
+        Color {
+            r: if self.r > one {self.r % one} else {self.r},
+            g: if self.g > one {self.g % one} else {self.g},
+            b: if self.b > one {self.b % one} else {self.b},
+        }
     }
 
     pub fn to_int<G: PrimInt + Unsigned + Display>(&self) -> Option<Color<G>>{
