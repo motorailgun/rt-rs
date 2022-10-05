@@ -19,8 +19,17 @@ impl<T: Float> Vec3d<T> {
                         z: self.z * other.z }
     }
 
+    pub fn norm_pow2(&self) -> T {
+        self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
+    }
+
     pub fn norm(&self) -> T {
-        return (self.x * self.x + self.y * self.y + self.z * self.z).sqrt();
+        self.norm_pow2().sqrt()
+    }
+
+    pub fn unitize(&self) -> Vec3d<T> {
+        let norm = self.norm();
+        return *self / norm;
     }
 }
 
