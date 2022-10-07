@@ -1,29 +1,48 @@
 pub mod vec3d;
 pub mod color;
 pub mod ray;
+pub mod primitives;
+pub mod material;
+pub mod rtweekend;
 
 use vec3d::Vec3d;
 use color::Color;
 use ray::Ray;
 
-/* fn ray_color(ray: Ray<f32>) -> Color<f32> {
+fn ray_color(ray: Ray<f32>) -> Color<f32> {
     let ray_dir = ray.direction; 
     let factor = (ray_dir.unitize().y + 1.) * 0.5;
-    let base
-} */
+    let base = Color{r: 0.5, g: 0.7, b: 1.0};
+    let sauce = Color{r: 1., g: 1., b: 1.};
+
+    sauce * (1. - factor) + base * factor
+}
 
 fn main() {
     const ASPECT_RATIO: f32 = 16. / 9.;
     const IMAGE_HEIGHT: usize = 200;
     const IMAGE_WIDTH: usize = ((IMAGE_HEIGHT as f32) * ASPECT_RATIO) as usize;
 
+    let origin = Vec3d{x: 0., y: 0., z: 0.};
+
+    let (lu_x, ru_x) = (-1.0, 1.0);
+    let (lu_y, rd_y) = (ru_x / ASPECT_RATIO, -ru_x / ASPECT_RATIO);
+    let z_center = 1.0;
+
     let canvas: Vec<Vec<Color<f32>>> = (0..IMAGE_HEIGHT).into_iter().map(|y: usize| {
         (0..IMAGE_WIDTH).into_iter().map(|x: usize| {
-            Color{
-                r: x as f32 / IMAGE_WIDTH as f32,
-                g: y as f32 / IMAGE_HEIGHT as f32,
-                b: 0.4,
-            }
+            let x_factor = x as f32 / IMAGE_WIDTH as f32;
+            let y_factor = y as f32 / IMAGE_HEIGHT as f32;
+
+            let ray = Ray{
+                start: origin,
+                direction: Vec3d {
+                    x: lu_x + (ru_x - lu_x) * x_factor,
+                    y: lu_y + (rd_y - lu_y) * y_factor,
+                    z: z_center,
+                }
+            };
+            ray_color(ray)
         }).collect()
     }).collect();
 
