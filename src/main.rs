@@ -3,7 +3,7 @@ pub mod color;
 pub mod ray;
 pub mod primitives;
 pub mod material;
-pub mod rtweekend;
+pub mod utils;
 
 use vec3d::Vec3d;
 use color::Color;
