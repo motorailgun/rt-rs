@@ -13,14 +13,12 @@ impl<T: Float> Vec3d<T> {
         return Vec3d { x: T::zero(), y: T::zero(), z: T::zero() };
     }
 
-    pub fn dot(&self, other: &Vec3d<T>) -> Vec3d<T> {
-        return Vec3d { x: self.x * other.x,
-                        y: self.y * other.y,
-                        z: self.z * other.z }
+    pub fn dot(&self, other: &Vec3d<T>) -> T {
+        return self.x * other.x + self.y * other.y + self.z * other.z
     }
 
     pub fn norm_pow2(&self) -> T {
-        self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
+        self.dot(self)
     }
 
     pub fn norm(&self) -> T {
@@ -59,9 +57,9 @@ impl<T: Float> Mul<T> for Vec3d<T> {
     type Output = Vec3d<T>;
     fn mul(self, other: T) -> Self::Output {
         return Vec3d {
-            x: self.x - other,
-            y: self.y - other,
-            z: self.z - other
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other
         };
     }
 }
