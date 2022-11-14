@@ -1,17 +1,17 @@
 use num_traits::Float;
-use crate::{ray::Ray, vec3d::Vec3d, material::Material};
+use crate::{ray::Ray, vec3d::Vec3d, material::sphere_material};
 
 pub trait Primitive<T: Float> {
     fn intersect(&self, incoming_ray: &Ray<T>) -> Option<Ray<T>>;
 }
 
-pub struct Sphere<T: Float, G: Material<T>> {
+pub struct Sphere<T: Float, G: sphere_material::Material<T>> {
     pub center: Vec3d<T>,
     pub radius: T,
     pub material: G,
 }
 
-impl<T: Float, G: Material<T>> Primitive<T> for Sphere<T, G> {
+impl<T: Float, G: sphere_material::Material<T>> Primitive<T> for Sphere<T, G> {
     fn intersect(&self, incoming_ray: &Ray<T>) -> Option<Ray<T>> {
         let center_to_origin = incoming_ray.start - self.center;
         let a = incoming_ray.direction.norm();
@@ -24,7 +24,7 @@ impl<T: Float, G: Material<T>> Primitive<T> for Sphere<T, G> {
         } else {
             Some(Ray::<T> {
                 start: incoming_ray.start + incoming_ray.direction * discriminant,
-                direction: self.material.reflect(&(incoming_ray.start + incoming_ray.direction * discriminant))
+                direction: self.material.reflect(self, &(incoming_ray.start + incoming_ray.direction * discriminant))
             })
         }
     }
