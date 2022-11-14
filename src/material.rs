@@ -15,8 +15,8 @@ pub mod sphere_material {
     where T: Float + Display, Standard: Distribution<T> {
         #[allow(unused_variables)]
         fn reflect<U: Material<T>>(&self, prim: &Sphere<T, U>, hit_point: &Vec3d<T>) -> Vec3d<T> {
-            random_vec_in_unit_sphere()
-            // todo: must fix this to emit outgoing vector using normal
+            random_vec_in_unit_sphere() + *hit_point - prim.center
+            // todo: fix near-zero vectors
         }
     }
 }
