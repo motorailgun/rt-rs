@@ -9,6 +9,8 @@ use vec3d::Vec3d;
 use color::Color;
 use ray::Ray;
 
+use crate::{primitives::Sphere, material::sphere_material};
+
 fn ray_color(ray: Ray<f32>) -> Color<f32> {
     let ray_dir = ray.direction; 
     let factor = (ray_dir.unitize().y + 1.) * 0.5;
@@ -28,6 +30,23 @@ fn main() {
     let (lu_x, ru_x) = (-1.0, 1.0);
     let (lu_y, rd_y) = (ru_x / ASPECT_RATIO, -ru_x / ASPECT_RATIO);
     let z_center = 1.0;
+
+    let world = vec![
+        Sphere{
+            center: Vec3d{x: 0., y: 0., z: 1.},
+            radius: 0.5,
+            material: sphere_material::Lambertian{
+                color: Color{r: 0.8, g: 0.8, b: 0.8}
+            }
+        },
+        Sphere{
+            center: Vec3d{x: 0., y: -100.5, z: 1.},
+            radius: 100.,
+            material: sphere_material::Lambertian{
+                color: Color{r: 0.8, g: 0.8, b: 0.8}
+            }
+        }
+    ];
 
     let canvas: Vec<Vec<Color<f32>>> = (0..IMAGE_HEIGHT).into_iter().map(|y: usize| {
         (0..IMAGE_WIDTH).into_iter().map(|x: usize| {
