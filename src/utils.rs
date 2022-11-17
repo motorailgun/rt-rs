@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, any::type_name};
 use crate::vec3d::Vec3d;
 use num_traits::Float;
 use rand::{self, Rng, prelude::Distribution, distributions::Standard};
@@ -24,3 +24,18 @@ pub fn random_vec_in_unit_sphere<T>() -> Vec3d<T>
 
     Vec3d { x, y, z }
 }
+
+pub trait FloatU: Float {
+    fn f64(self) -> f64 {
+        self.to_f64().expect(&format!("No known comversion from {} to f64", type_name::<Self>()))
+    }
+    fn f32(self) -> f32 {
+        self.to_f32().expect(&format!("No known comversion from {} to f32", type_name::<Self>()))
+    }
+    fn tt<T: Float>(self) -> T {
+        T::from(self).expect(&format!("No known comversion from {} to {}", type_name::<T>(), type_name::<Self>()))
+    }
+}
+
+impl FloatU for f64 {}
+impl FloatU for f32 {}

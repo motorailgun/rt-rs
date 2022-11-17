@@ -5,25 +5,38 @@ pub mod primitives;
 pub mod material;
 pub mod utils;
 
+use std::fmt::Display;
+
 use vec3d::Vec3d;
 use color::Color;
 use ray::Ray;
+use utils::*;
 
-use crate::{primitives::Sphere, material::sphere_material};
+use crate::{primitives::{Sphere, Primitive, HitRecord}, material::sphere_material};
 
-fn ray_color(ray: Ray<f32>) -> Color<f32> {
+fn ray_color<T: FloatU + Display>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>>, count: usize) -> Color<T> {
+    if count == 0 {
+        let zero = T::from(0f64).expect("no known conversion from f64 to T");
+        return Color::<T>{r: zero, g: zero, b: zero}
+    }
+
+    let min: T = 1e-6.tt();
+    let hit_list: Vec<Option<HitRecord<T>>> = world.iter().map(|prim| prim.intersect(&ray, min, T::infinity())).collect();
+
     let ray_dir = ray.direction; 
-    let factor = (ray_dir.unitize().y + 1.) * 0.5;
-    let base = Color{r: 0.5, g: 0.7, b: 1.0};
-    let sauce = Color{r: 1., g: 1., b: 1.};
+    let factor: T = ray_dir.unitize().y + 1.0.tt::<T>() * 0.5.tt();
+    let base: Color<T> = Color{r: 0.5.tt(), g: 0.7.tt(), b: 1.0.tt()};
+    let sauce: Color<T> = Color{r: 1.0.tt(), g: 1.0.tt(), b: 1.0.tt()};
 
-    sauce * (1. - factor) + base * factor
+    sauce * (1.0.tt::<T>() - factor) + base * factor
 }
 
 fn main() {
     const ASPECT_RATIO: f32 = 16. / 9.;
     const IMAGE_HEIGHT: usize = 200;
     const IMAGE_WIDTH: usize = ((IMAGE_HEIGHT as f32) * ASPECT_RATIO) as usize;
+    const RAY_COUNT: usize = 100;
+    const SAMPLE_COUNT: usize = 100;
 
     let origin = Vec3d{x: 0., y: 0., z: 0.};
 
@@ -31,21 +44,21 @@ fn main() {
     let (lu_y, rd_y) = (ru_x / ASPECT_RATIO, -ru_x / ASPECT_RATIO);
     let z_center = 1.0;
 
-    let world = vec![
-        Sphere{
+    let world: Vec<Box<dyn Primitive<f32>>> = vec![
+        Box::new(Sphere{
             center: Vec3d{x: 0., y: 0., z: 1.},
             radius: 0.5,
             material: sphere_material::Lambertian{
                 color: Color{r: 0.8, g: 0.8, b: 0.8}
             }
-        },
-        Sphere{
+        }),
+        Box::new(Sphere{
             center: Vec3d{x: 0., y: -100.5, z: 1.},
             radius: 100.,
             material: sphere_material::Lambertian{
                 color: Color{r: 0.8, g: 0.8, b: 0.8}
             }
-        }
+        })
     ];
 
     let canvas: Vec<Vec<Color<f32>>> = (0..IMAGE_HEIGHT).into_iter().map(|y: usize| {
@@ -61,7 +74,7 @@ fn main() {
                     z: z_center,
                 }
             };
-            ray_color(ray)
+            ray_color(ray, &world, RAY_COUNT)
         }).collect()
     }).collect();
 
