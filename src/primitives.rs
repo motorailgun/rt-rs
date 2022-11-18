@@ -1,5 +1,7 @@
+use std::fmt::Display;
+
 use num_traits::Float;
-use crate::{ray::Ray, vec3d::Vec3d, material::sphere_material};
+use crate::{ray::Ray, vec3d::Vec3d, material::{Material, sphere_material::Lambertian}};
 
 pub struct HitRecord<'a, T: Float> {
     pub ray: Ray<T>,
@@ -9,15 +11,16 @@ pub struct HitRecord<'a, T: Float> {
 
 pub trait Primitive<T: Float> {
     fn intersect(&self, incoming_ray: &Ray<T>, t_min: T, t_max: T) -> Option<HitRecord<T>>;
+    fn material(&self) -> Box<dyn Material<T>>;
 }
 
-pub struct Sphere<T: Float, G: sphere_material::Material<T>> {
+pub struct Sphere<T: Float + Display, G: Material<T>> {
     pub center: Vec3d<T>,
     pub radius: T,
     pub material: G,
 }
 
-impl<T: Float, G: sphere_material::Material<T>> Primitive<T> for Sphere<T, G> {
+impl<T: Float + Display, G: Material<T>> Primitive<T> for Sphere<T, G> {
     fn intersect(&self, incoming_ray: &Ray<T>, t_min: T, t_max: T) -> Option<HitRecord<T>> {
         let center_to_origin = incoming_ray.start - self.center;
         let a = incoming_ray.direction.norm();
@@ -46,5 +49,9 @@ impl<T: Float, G: sphere_material::Material<T>> Primitive<T> for Sphere<T, G> {
                 t,
             })
         }
+    }
+
+    fn material(&self) -> G {
+        Box::new(self.material)
     }
 }

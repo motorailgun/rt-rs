@@ -21,14 +21,37 @@ fn ray_color<T: FloatU + Display>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>
     }
 
     let min: T = 1e-6.tt();
-    let hit_list: Vec<Option<HitRecord<T>>> = world.iter().map(|prim| prim.intersect(&ray, min, T::infinity())).collect();
+    let hit_list: Vec<Option<HitRecord<T>>> = world.iter()
+                                              .map(|prim| prim.intersect(&ray, min, T::infinity()))
+                                              .collect();
+    let to_what = hit_list.into_iter()
+                                        .filter_map(|record| record)
+                                        .fold(None::<HitRecord<T>>, |post, record| {
+                                            match post {
+                                                Some(post_rec) => {
+                                                    if post_rec.t > record.t {
+                                                        Some(record)
+                                                    } else {
+                                                        Some(post_rec)
+                                                    }
+                                                },
+                                                None => Some(record),
+                                            }
+                                        });
 
-    let ray_dir = ray.direction; 
-    let factor: T = ray_dir.unitize().y + 1.0.tt::<T>() * 0.5.tt();
-    let base: Color<T> = Color{r: 0.5.tt(), g: 0.7.tt(), b: 1.0.tt()};
-    let sauce: Color<T> = Color{r: 1.0.tt(), g: 1.0.tt(), b: 1.0.tt()};
+    match to_what {
+        Some(record) => {
+            record.prim.material().color()
+        },
+        None => {
+            let ray_dir = ray.direction; 
+            let factor: T = ray_dir.unitize().y + 1.0.tt::<T>() * 0.5.tt();
+            let base: Color<T> = Color{r: 0.5.tt(), g: 0.7.tt(), b: 1.0.tt()};
+            let sauce: Color<T> = Color{r: 1.0.tt(), g: 1.0.tt(), b: 1.0.tt()};
 
-    sauce * (1.0.tt::<T>() - factor) + base * factor
+            sauce * (1.0.tt::<T>() - factor) + base * factor
+        },
+    }
 }
 
 fn main() {
