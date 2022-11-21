@@ -45,7 +45,7 @@ fn ray_color<T: FloatU + Display>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>
         },
         None => {
             let ray_dir = ray.direction; 
-            let factor: T = ray_dir.unitize().y + 1.0.tt::<T>() * 0.5.tt();
+            let factor: T = (ray_dir.unitize().y + 1.0.tt::<T>()) * 0.5.tt();
             let base: Color<T> = Color{r: 0.5.tt(), g: 0.7.tt(), b: 1.0.tt()};
             let sauce: Color<T> = Color{r: 1.0.tt(), g: 1.0.tt(), b: 1.0.tt()};
 
