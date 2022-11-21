@@ -2,7 +2,7 @@ use num_traits::{Num, Unsigned, PrimInt, NumCast};
 use std::ops::{Add, Mul, Rem};
 use std::fmt::{self, Display};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Color<T: Num + fmt::Display> {
     pub r: T,
     pub g: T,

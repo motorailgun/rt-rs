@@ -1,7 +1,7 @@
 use num_traits::Float;
 use std::ops::{Add, Sub, Mul, Div};
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Vec3d<T: Float> {
         pub x: T,
         pub y: T,

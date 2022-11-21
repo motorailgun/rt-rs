@@ -14,6 +14,7 @@ pub trait Primitive<T: Float + Display> {
     fn color(&self) -> Color<T>;
 }
 
+#[derive(Debug)]
 pub struct Sphere<T: Float + Display, G: Material<T>> {
     pub center: Vec3d<T>,
     pub radius: T,
