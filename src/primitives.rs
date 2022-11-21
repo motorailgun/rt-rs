@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 use num_traits::Float;
-use crate::{ray::Ray, vec3d::Vec3d, material::{Material, sphere_material::Lambertian}};
+use crate::{ray::Ray, vec3d::Vec3d, color::Color, material::Material};
 
 pub struct HitRecord<'a, T: Float> {
     pub ray: Ray<T>,
@@ -9,15 +9,16 @@ pub struct HitRecord<'a, T: Float> {
     pub t: T,
 }
 
-pub trait Primitive<T: Float> {
+pub trait Primitive<T: Float + Display> {
     fn intersect(&self, incoming_ray: &Ray<T>, t_min: T, t_max: T) -> Option<HitRecord<T>>;
-    fn material(&self) -> Box<dyn Material<T>>;
+    fn color(&self) -> Color<T>;
 }
 
 pub struct Sphere<T: Float + Display, G: Material<T>> {
     pub center: Vec3d<T>,
     pub radius: T,
     pub material: G,
+    pub color: Color<T>,
 }
 
 impl<T: Float + Display, G: Material<T>> Primitive<T> for Sphere<T, G> {
@@ -51,7 +52,7 @@ impl<T: Float + Display, G: Material<T>> Primitive<T> for Sphere<T, G> {
         }
     }
 
-    fn material(&self) -> G {
-        Box::new(self.material)
+    fn color(&self) -> Color<T> {
+        self.color
     }
 }

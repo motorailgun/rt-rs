@@ -41,7 +41,7 @@ fn ray_color<T: FloatU + Display>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>
 
     match to_what {
         Some(record) => {
-            record.prim.material().color()
+            record.prim.color()
         },
         None => {
             let ray_dir = ray.direction; 
@@ -63,24 +63,23 @@ fn main() {
 
     let origin = Vec3d{x: 0., y: 0., z: 0.};
 
+    // TODO: These values must be bigger I guess?
     let (lu_x, ru_x) = (-1.0, 1.0);
     let (lu_y, rd_y) = (ru_x / ASPECT_RATIO, -ru_x / ASPECT_RATIO);
     let z_center = 1.0;
 
     let world: Vec<Box<dyn Primitive<f32>>> = vec![
         Box::new(Sphere{
-            center: Vec3d{x: 0., y: 0., z: 1.},
+            center: Vec3d{x: 0., y: -0.5, z: 1.},
             radius: 0.5,
-            material: sphere_material::Lambertian{
-                color: Color{r: 0.8, g: 0.8, b: 0.8}
-            }
+            material: sphere_material::Lambertian{},
+            color: Color{r: 0.8, g: 0.0, b: 0.0},
         }),
         Box::new(Sphere{
-            center: Vec3d{x: 0., y: -100.5, z: 1.},
+            center: Vec3d{x: 0., y: -101., z: 1.},
             radius: 100.,
-            material: sphere_material::Lambertian{
-                color: Color{r: 0.8, g: 0.8, b: 0.8}
-            }
+            material: sphere_material::Lambertian{},
+            color: Color{r: 0.0, g: 0.8, b: 0.0},
         })
     ];
 
@@ -92,10 +91,11 @@ fn main() {
             let ray = Ray{
                 start: origin,
                 direction: Vec3d {
+                    // TODO: check this formula
                     x: lu_x + (ru_x - lu_x) * x_factor,
                     y: lu_y + (rd_y - lu_y) * y_factor,
                     z: z_center,
-                }
+                }.unitize()
             };
             ray_color(ray, &world, RAY_COUNT)
         }).collect()
