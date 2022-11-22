@@ -25,7 +25,7 @@ pub struct Sphere<T: Float + Display, G: Material<T>> {
 impl<T: Float + Display, G: Material<T>> Primitive<T> for Sphere<T, G> {
     fn intersect(&self, incoming_ray: &Ray<T>, t_min: T, t_max: T) -> Option<HitRecord<T>> {
         let center_to_origin = incoming_ray.start - self.center;
-        let a = incoming_ray.direction.norm();
+        let a = incoming_ray.direction.norm_pow2();
         let half_b = center_to_origin.dot(&incoming_ray.direction);
         let c = center_to_origin.norm() - self.radius * self.radius;
         let discriminant = half_b * half_b - a * c;
