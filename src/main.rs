@@ -41,7 +41,7 @@ fn ray_color<T: FloatU + Display + Debug>(ray: Ray<T>, world: &Vec<Box<dyn Primi
 
     match to_what {
         Some(record) => {
-            record.prim.color()
+            record.prim.color() * ray_color(record.ray, world, count - 1) * 0.5.tt::<T>()
         },
         None => {
             let ray_dir = ray.direction; 
@@ -76,13 +76,13 @@ fn main() {
             center: Vec3d{x: 0., y: 0., z: -1.},
             radius: 0.5,
             material: sphere_material::Lambertian{},
-            color: Color{r: 0.8, g: 0.0, b: 0.0},
+            color: Color{r: 0.9, g: 0.9, b: 0.9},
         }),
         Box::new(Sphere{
             center: Vec3d{x: 0., y: -100.5, z: -1.},
             radius: 100.,
             material: sphere_material::Lambertian{},
-            color: Color{r: 0.0, g: 0.8, b: 0.0},
+            color: Color{r: 0.9, g: 0.9, b: 0.9},
         })
     ];
 
@@ -95,7 +95,10 @@ fn main() {
                 start: origin,
                 direction: upper_left_corner + horizontal * x_factor - vertical * y_factor,
             };
-            ray_color(ray, &world, RAY_COUNT)
+
+            (0..SAMPLE_COUNT).into_iter().fold(Color{r: 0., g: 0., b: 0.}, |res, _| {
+                res + ray_color(ray, &world, RAY_COUNT)
+            }) / (SAMPLE_COUNT as f32)
         }).collect()
     }).collect();
 
