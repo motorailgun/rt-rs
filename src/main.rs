@@ -60,6 +60,7 @@ fn main() {
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f32 / ASPECT_RATIO) as usize;
     const RAY_COUNT: usize = 100;
     const SAMPLE_COUNT: usize = 100;
+    const MULTISAMPLE: usize = 2;
 
     let origin = Vec3d{x: 0., y: 0., z: 0.};
 
@@ -97,8 +98,15 @@ fn main() {
             };
 
             (0..SAMPLE_COUNT).into_iter().fold(Color{r: 0., g: 0., b: 0.}, |res, _| {
-                res + ray_color(ray, &world, RAY_COUNT)
-            }) / (SAMPLE_COUNT as f32)
+                (0..MULTISAMPLE).into_iter().fold(res, |r, x|{
+                    (0..MULTISAMPLE).into_iter().fold(r, |r2, y| {
+                        let mut ray_c = ray;
+                        ray_c.direction = ray_c.direction + horizontal / IMAGE_WIDTH as f32 * (x as f32 / MULTISAMPLE as f32);
+                        ray_c.direction = ray_c.direction + vertical / IMAGE_HEIGHT as f32 * (y as f32 / MULTISAMPLE as f32);
+                        r2 + ray_color(ray_c, &world, RAY_COUNT)
+                    })
+                })
+            }) / (MULTISAMPLE * MULTISAMPLE * SAMPLE_COUNT) as f32
         }).collect()
     }).collect();
 
