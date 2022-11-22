@@ -5,7 +5,7 @@ pub mod primitives;
 pub mod material;
 pub mod utils;
 
-use std::fmt::Display;
+use std::fmt::{Display, Debug};
 
 use vec3d::Vec3d;
 use color::Color;
@@ -14,7 +14,7 @@ use utils::*;
 
 use crate::{primitives::{Sphere, Primitive, HitRecord}, material::sphere_material};
 
-fn ray_color<T: FloatU + Display>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>>, count: usize) -> Color<T> {
+fn ray_color<T: FloatU + Display + Debug>(ray: Ray<T>, world: &Vec<Box<dyn Primitive<T>>>, count: usize) -> Color<T> {
     if count == 0 {
         let zero = T::from(0f64).expect("no known conversion from f64 to T");
         return Color::<T>{r: zero, g: zero, b: zero}
