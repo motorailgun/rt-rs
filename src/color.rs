@@ -37,6 +37,17 @@ impl<T: Num + Copy + fmt::Display> Mul<T> for Color<T> {
     }
 }
 
+impl<T: Num + Copy + fmt::Display> Mul<Color<T>> for Color<T> {
+    type Output = Color<T>;
+    fn mul(self, other: Color<T>) -> Self::Output {
+        Color::<T> {
+            r: self.r * other.r,
+            g: self.g * other.g,
+            b: self.b * other.b,
+        }
+    }
+}
+
 impl<T: Num + Copy + fmt::Display> Rem<T> for Color<T> {
     type Output = Color<T>;
     fn rem(self, other: T) -> Self::Output {
