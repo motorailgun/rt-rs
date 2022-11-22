@@ -1,5 +1,5 @@
 use num_traits::{Num, Unsigned, PrimInt, NumCast};
-use std::ops::{Add, Mul, Rem};
+use std::ops::{Add, Mul, Rem, Div};
 use std::fmt::{self, Display};
 
 #[derive(Clone, Copy, Debug)]
@@ -47,6 +47,18 @@ impl<T: Num + Copy + fmt::Display> Mul<Color<T>> for Color<T> {
         }
     }
 }
+
+impl<T: Num + Copy + fmt::Display> Div<T> for Color<T> {
+    type Output = Color<T>;
+    fn div(self, other: T) -> Self::Output {
+        return Color {
+            r: self.r / other,
+            g: self.g / other,
+            b: self.b / other
+        };
+    }
+}
+
 
 impl<T: Num + Copy + fmt::Display> Rem<T> for Color<T> {
     type Output = Color<T>;
