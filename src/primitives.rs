@@ -46,7 +46,7 @@ impl<T: Float + Display, G: Material<T>> Primitive<T> for Sphere<T, G> {
                 prim: Box::new(self),
                 ray: Ray::<T> {
                     start,
-                    direction: start - self.center,
+                    direction: self.material.reflect(&self, &start),
                 },
                 t,
             })
