@@ -75,9 +75,9 @@ impl<T: Num + fmt::Display + NumCast + Copy + PartialOrd> Color<T> {
     fn clamp(&self) -> Color<T> {
         let one = T::one();
         Color {
-            r: if self.r > one {self.r % one} else {self.r},
-            g: if self.g > one {self.g % one} else {self.g},
-            b: if self.b > one {self.b % one} else {self.b},
+            r: if self.r > one {one} else {self.r},
+            g: if self.g > one {one} else {self.g},
+            b: if self.b > one {one} else {self.b},
         }
     }
 
