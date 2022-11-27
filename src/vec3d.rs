@@ -1,5 +1,5 @@
 use num_traits::Float;
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Sub, Mul, Div, Neg};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Vec3d<T: Float> {
@@ -72,5 +72,17 @@ impl<T: Float> Div<T> for Vec3d<T> {
             y: self.y / other,
             z: self.z / other
         };
+    }
+}
+
+
+impl<T: Float> Neg for Vec3d<T> {
+    type Output = Vec3d<T>;
+    fn neg(self) -> Self::Output {
+        return Vec3d {
+            x: -self.x,
+            y: -self.y,
+            z: -self.y
+        }
     }
 }
