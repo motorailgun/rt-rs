@@ -2,19 +2,21 @@ use std::fmt::Display;
 
 use num_traits::{Float, PrimInt, Num};
 
-pub struct Color<T: Num> {
-    pub r: T,
-    pub g: T,
-    pub b: T,
+pub struct Vec3<T: Num> {
+    pub x: T,
+    pub y: T,
+    pub z: T,
 }
+
+type Color<T: Num> = Vec3<T>;
 
 impl<T: Float> Color<T> {
     pub fn clamp(&self) -> Color<T> {
         let one = T::one();
         Color { 
-            r: if self.r > one { one } else {self.r},
-            g: if self.g > one { one } else {self.g},
-            b: if self.b > one { one } else {self.b},
+            x: if self.x > one { one } else {self.x},
+            y: if self.y > one { one } else {self.y},
+            z: if self.z > one { one } else {self.z},
         }
     }
     
@@ -23,9 +25,9 @@ impl<T: Float> Color<T> {
         let clamped = self.clamp();
 
         Color {
-            r: U::from(clamped.r * max).unwrap(),
-            g: U::from(clamped.g * max).unwrap(),
-            b: U::from(clamped.b * max).unwrap(),
+            x: U::from(clamped.x * max).unwrap(),
+            y: U::from(clamped.y * max).unwrap(),
+            z: U::from(clamped.z * max).unwrap(),
         }
     }
 }
@@ -39,7 +41,7 @@ fn out_image<T: Float, U: PrimInt + Display>(canvas: &Vec<Vec<Color<T>>>, width:
     for line in canvas.iter() {
         for pixel in line.iter() {
             let pix_i = pixel.to_int::<U>();
-            print!("{} {} {} ", pix_i.r, pix_i.g, pix_i.b);
+            print!("{} {} {} ", pix_i.x, pix_i.y, pix_i.z);
         }
         println!("");
     }
@@ -52,7 +54,7 @@ fn render<T: Float>(width: usize, height: usize) -> Vec<Vec<Color<T>>> {
             let g = T::from(x).unwrap() / T::from(width).unwrap();
             let b = T::from(0.25).unwrap();
 
-            Color{r, g, b}
+            Color{x: r, y: g, z: b}
         }).collect()
     }).collect()
 }
