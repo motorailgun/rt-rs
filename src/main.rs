@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, ops::{Add, Neg, Mul, Div}};
 
 use num_traits::{Float, PrimInt, Num};
 
@@ -8,7 +8,66 @@ pub struct Vec3<T: Num> {
     pub z: T,
 }
 
-type Color<T: Num> = Vec3<T>;
+type Color<T> = Vec3<T>;
+type Point3<T> = Vec3<T>;
+
+impl<T: Float> Neg for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn neg(self) -> Self::Output {
+        Vec3 {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+        }
+    }
+}
+
+impl<T: Float> Add for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn add(self, rhs: Vec3<T>) -> Self::Output {
+        Vec3 {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+        }
+    }
+}
+
+impl<T: Float> Mul<T> for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        Vec3 {
+            x: self.x * rhs,
+            y: self.y * rhs,
+            z: self.z * rhs,
+        }
+    }
+}
+
+impl<T: Float> Div<T> for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn div(self, rhs: T) -> Self::Output {
+        Vec3 {
+            x: self.x / rhs,
+            y: self.y / rhs,
+            z: self.z / rhs,
+        }
+    }
+}
+
+impl<T: Float> Vec3<T> {
+    pub fn length_sq(&self) -> T {
+        self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
+    }
+
+    pub fn length(&self) -> T {
+        self.length_sq().sqrt()
+    }
+}
 
 impl<T: Float> Color<T> {
     pub fn clamp(&self) -> Color<T> {
