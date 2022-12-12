@@ -1,4 +1,4 @@
-use std::{fmt::Display, ops::{Add, Neg, Mul, Div}};
+use std::{fmt::Display, ops::{Add, Neg, Mul, Div, Sub}};
 
 use num_traits::{Float, PrimInt, Num};
 
@@ -31,6 +31,18 @@ impl<T: Float> Add for Vec3<T> {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
             z: self.z + rhs.z,
+        }
+    }
+}
+
+impl<T: Float> Sub for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Vec3 {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z
         }
     }
 }
