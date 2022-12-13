@@ -1,6 +1,7 @@
 use std::{ops::{Add, Neg, Mul, Div, Sub}};
 use num_traits::{Float, Num};
 
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Vec3<T: Num> {
     pub x: T,
     pub y: T,
