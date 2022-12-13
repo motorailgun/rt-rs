@@ -1,7 +1,7 @@
 use std::fmt::Display;
 #[allow(unused_imports)]
 use num_traits::{Float, PrimInt, Num};
-use rt_rs::*;
+use rt_rs::prelude::*;
 
 fn out_image<T: Float, U: PrimInt + Display>(canvas: &Vec<Vec<Color<T>>>, width: usize, height: usize){
     let level = U::max_value().to_u64().unwrap() + 1u64;
