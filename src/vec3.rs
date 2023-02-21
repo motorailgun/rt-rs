@@ -1,5 +1,5 @@
-use std::{ops::{Add, Neg, Mul, Div, Sub}};
 use num_traits::{Float, Num};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Vec3<T: Num> {
@@ -39,7 +39,7 @@ impl<T: Float> Sub for Vec3<T> {
         Vec3 {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
-            z: self.z - rhs.z
+            z: self.z - rhs.z,
         }
     }
 }
@@ -78,15 +78,22 @@ impl<T: Float> Vec3<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn add() {
-        let x = Vec3::<f64>{ x: 2., y: 3., z: 4.};
-        let y = Vec3::<f64>{ x: 4., y: 5., z: 6.};
+        let x = Vec3::<f64> {
+            x: 2.,
+            y: 3.,
+            z: 4.,
+        };
+        let y = Vec3::<f64> {
+            x: 4.,
+            y: 5.,
+            z: 6.,
+        };
 
         let res = x + y;
 
@@ -97,8 +104,16 @@ mod tests {
 
     #[test]
     fn sub() {
-        let x = Vec3::<f64>{ x: 2., y: 3., z: 4.};
-        let y = Vec3::<f64>{ x: 4., y: 5., z: 6.};
+        let x = Vec3::<f64> {
+            x: 2.,
+            y: 3.,
+            z: 4.,
+        };
+        let y = Vec3::<f64> {
+            x: 4.,
+            y: 5.,
+            z: 6.,
+        };
 
         let res = x - y;
 
@@ -107,10 +122,13 @@ mod tests {
         assert!(res.z + 2. < 1e-8);
     }
 
-
     #[test]
     fn mul() {
-        let x = Vec3::<f64>{ x: 2., y: 3., z: 4.};
+        let x = Vec3::<f64> {
+            x: 2.,
+            y: 3.,
+            z: 4.,
+        };
         let y = 4f64;
 
         let res = x * y;
@@ -122,7 +140,11 @@ mod tests {
 
     #[test]
     fn div() {
-        let x = Vec3::<f64>{ x: 2., y: 3., z: 4.};
+        let x = Vec3::<f64> {
+            x: 2.,
+            y: 3.,
+            z: 4.,
+        };
         let y = 4f64;
 
         let res = x / y;
@@ -134,7 +156,11 @@ mod tests {
 
     #[test]
     fn neg() {
-        let x = Vec3::<f64>{ x: 2., y: 3., z: 4.};
+        let x = Vec3::<f64> {
+            x: 2.,
+            y: 3.,
+            z: 4.,
+        };
         let res = -x;
 
         assert!(res.x + 2. < 1e-8);
