@@ -76,6 +76,10 @@ impl<T: Float> Vec3<T> {
     pub fn length(&self) -> T {
         self.length_sq().sqrt()
     }
+
+    pub fn unit_vector(&self) -> Vec3<T> {
+        *self / self.length_sq()
+    }
 }
 
 #[cfg(test)]
